@@ -1,6 +1,6 @@
 package Utils;
 
-import API.Jigit ra.PojoJira.ResponseBodyJira;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -92,8 +92,8 @@ public class PayloadUtils { // requestBody == Payload
         Assert.assertEquals(HttpStatus.SC_OK,httpResponse.getStatusLine().getStatusCode());
         ObjectMapper objectMapper=new ObjectMapper();
 
-        ResponseBodyJira parsedObject =objectMapper.readValue(httpResponse.getEntity().getContent(),
-                ResponseBodyJira.class);
+        ResponseBodyAuth parsedObject =objectMapper.readValue(httpResponse.getEntity().getContent(),
+                ResponseBodyAuth.class);
 
 //        System.out.println(parsedObject.getSession().getName());
 //        System.out.println(parsedObject.getSession().getValue());
