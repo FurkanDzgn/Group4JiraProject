@@ -1,5 +1,12 @@
 package Utils;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+// import API.Jira.PojoJira.ResponseBodyJira;
+>>>>>>> f4e0f2e7d52dd51479f9100f4ff9b184175e816d
+>>>>>>> 06b542723a4d1d5b15898d706cd374887e29b559
 import Pojo.PojoJira.ResponseBodyAuth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
