@@ -1,6 +1,6 @@
 package Utils;
 
-import API.Jira.PojoJira.ResponseBodyJira;
+import API.Jigit ra.PojoJira.ResponseBodyJira;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
