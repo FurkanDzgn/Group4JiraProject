@@ -23,5 +23,8 @@ public class IssuePage {
 
     @FindBy(xpath="//a[@id='log_out']")
     public WebElement logOutButton;
+
+    @FindBy(xpath = "//dd[@id='issuekey-val']")
+    public WebElement nameOfCreatedStory;
 }
 
