@@ -1,6 +1,7 @@
 package StepDefinitions.Jira;
 
-import Jira.Localhost8080.LoginPage;
+
+import Pages.LoginPage;
 import Utils.ConfigReader;
 import Utils.Driver;
 import io.cucumber.java.en.Given;
