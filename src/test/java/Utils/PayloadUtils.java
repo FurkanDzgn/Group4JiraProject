@@ -1,14 +1,12 @@
 package Utils;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-// import API.Jira.PojoJira.ResponseBodyJira;
->>>>>>> f4e0f2e7d52dd51479f9100f4ff9b184175e816d
->>>>>>> 06b542723a4d1d5b15898d706cd374887e29b559
 import Pojo.PojoJira.ResponseBodyAuth;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -19,10 +17,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Assert;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import static io.restassured.RestAssured.*;
 
 public class PayloadUtils { // requestBody == Payload
 
@@ -109,5 +110,31 @@ public class PayloadUtils { // requestBody == Payload
         String cookieValue=parsedObject.getSession().getValue();
 
         return String.format("%s=%s",cookieName,cookieValue);
+    }
+
+    public static String getJiraCookies(){
+        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.basePath = "rest/auth/1/session";
+
+        RestAssured.requestSpecification = new RequestSpecBuilder()
+                .setAccept(ContentType.JSON).setContentType(ContentType.JSON).build();
+        RestAssured.responseSpecification = new ResponseSpecBuilder()
+                .expectStatusCode(200).expectContentType(ContentType.JSON).build();
+
+        File filePet = new File("jira.json");
+        Response response = given().spec(requestSpecification)
+                .body(filePet)
+                .when().post()
+                .then().spec(responseSpecification)
+                .extract().response();
+
+        ResponseBodyAuth responseBodyJira = response.as(ResponseBodyAuth.class);
+
+        String userName = responseBodyJira.getSession().getName();
+        String value = responseBodyJira.getSession().getValue();
+
+        String result = userName +"="+value;
+        //     return String.format("%s=%s",userName,value);
+        return result;
     }
 }

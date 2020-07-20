@@ -11,9 +11,9 @@ import org.junit.runner.RunWith;
 //                "json:target\\cucumber.json",
 //                "junit:target\\cucumber.xml",
 //                "rerun:target\\rerun.txt" },
-        features = "src\\test\\resources\\JIRA\\projectJira.feature",
+        features = "src\\test\\resources\\JIRA\\verifyUI.feature",
         glue = "StepDefinitions",
-        dryRun = true
+        dryRun = false
 //           tags ="",
 //            snippets = CucumberOptions.SnippetType.CAMELCASE
 )
