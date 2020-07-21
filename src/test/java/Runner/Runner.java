@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 //                "json:target\\cucumber.json",
 //                "junit:target\\cucumber.xml",
 //                "rerun:target\\rerun.txt" },
-        features = "src\\test\\resources\\projectJira.feature",
+        features = "src\\test\\resources\\JIRA\\projectJira.feature",
         glue = "StepDefinitions",
         dryRun = false
 //           tags ="",

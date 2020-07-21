@@ -1,6 +1,6 @@
 package Utils;
 
-import API.Jira.PojoJira.ResponseBodyJira;
+import Pojo.PojoJira.ResponseBodyAuth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -55,25 +55,26 @@ public class PayloadUtils { // requestBody == Payload
 
     public static String cookieAuthPayload(){
         return "{\n" +
-                "    \"username\":\"furkan.duzgun\",\n" +
-                "    \"password\":\"VwMGkY2#cD6Xdct\"\n" +
+                "    \"username\":\""+ConfigReader.getProperty("username")+"\",\n" +
+                "    \"password\":\""+ConfigReader.getProperty("password")+"\"\n" +
                 "}";
     }
 
-    public static String getJiraIssuePayload(String summary,String description,String issuetype){
+    public static String getJiraIssuePayload(String summary,String description,String issueType) {
         return "{\n" +
-                "    \"fields\":{\n" +
-                "        \"project\":{\n" +
-                "            \"key\":\"TEC\"\n" +
+                "    \"fields\": {\n" +
+                "        \"project\": {\n" +
+                "            \"key\": \"TES\"\n" +
                 "        },\n" +
-                "        \"summary\":\""+summary+"\",\n" +
-                "        \"description\":\""+description+"\",\n" +
-                "        \"issuetype\":{\n" +
-                "            \"name\":\""+issuetype+"\"\n" +
+                "        \"summary\": \"" + summary + "\",\n" +
+                "        \"description\": \"" + description + "\",\n" +
+                "        \"issuetype\": {\n" +
+                "            \"name\": \"" + issueType + "\"\n" +
                 "        }\n" +
                 "    }\n" +
                 "}";
     }
+
 
     public static String getJsessionCookie() throws URISyntaxException, IOException {
         HttpClient httpClient= HttpClientBuilder.create().build();
@@ -92,15 +93,44 @@ public class PayloadUtils { // requestBody == Payload
         Assert.assertEquals(HttpStatus.SC_OK,httpResponse.getStatusLine().getStatusCode());
         ObjectMapper objectMapper=new ObjectMapper();
 
-        ResponseBodyJira parsedObject =objectMapper.readValue(httpResponse.getEntity().getContent(),
-                ResponseBodyJira.class);
+        ResponseBodyAuth parsedObject =objectMapper.readValue(httpResponse.getEntity().getContent(),
+                ResponseBodyAuth.class);
 
 //        System.out.println(parsedObject.getSession().getName());
 //        System.out.println(parsedObject.getSession().getValue());
 
-        String cookieName=parsedObject.getSession().getName();
-        String cookieValue=parsedObject.getSession().getValue();
+        String cookieName=parsedObject.getSession().get("name");
+        String cookieValue=parsedObject.getSession().get("value");
 
         return String.format("%s=%s",cookieName,cookieValue);
     }
+
+    public static String getJiraBoardPayload(String boardName, String boardType, int filterId){
+        return "{\n" +
+                "    \"name\": \""+boardName+"\",\n" +
+                "    \"type\": \""+boardType+"\",\n" +
+                "    \"filterId\": "+filterId+"\n" +
+                "}";
+    }
+
+    public static String getJiraSprintPayload(String sprintName, String startDate, String endDate, int boardId){
+        return "{\n" +
+                "    \"name\": \""+sprintName+"\",\n" +
+                "    \"startDate\": \""+startDate+"\",\n" +
+                "    \"endDate\": \""+endDate+"\",\n" +
+                "    \"originBoardId\": "+boardId+"\n" +
+                "}";
+    }
+
+
+    public static  String getJiraMoveIssuePayload(String key1,String id,String key2){
+        return "{\n" +
+                "    \"issues\": [\n" +
+                "        \""+key1+"\",\n" +
+                "        \""+id+"\",\n" +
+                "        \""+key2+"\"\n" +
+                "    ]\n" +
+                "}";
+    }
+
 }

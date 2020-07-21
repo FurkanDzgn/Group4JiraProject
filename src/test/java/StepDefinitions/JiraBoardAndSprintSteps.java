@@ -1,7 +1,4 @@
 package StepDefinitions;
-
-
-import Utils.PayloadUtils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -11,18 +8,21 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matchers;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import static StepDefinitions.Hook.requestSpecification;
-import static StepDefinitions.Hook.responseSpecification;
 import static Utils.PayloadUtils.*;
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 
 public class JiraBoardAndSprintSteps {
+
+    RequestSpecification requestSpecification;
+    ResponseSpecification responseSpecification;
 
     private static final String NAME="name";
     private static final String TYPE="type";
@@ -33,6 +33,7 @@ public class JiraBoardAndSprintSteps {
     private static Integer boardId;
     public static Map<String,Object> desResponse;
     Response response;
+
     public static List<Integer> ids=new ArrayList<>();
     public static List<String> issueIds=new ArrayList<>();
     public static List<String> issueKeys = new ArrayList<>();
@@ -67,7 +68,7 @@ public class JiraBoardAndSprintSteps {
     }
 
     @Then("the user validates the JiraBoard's {string}, {string}")
-    public void the_user_validates_the_JiraBoard_s(String boardName, String boardType) {
+    public void the_User_validates_the_JiraBoard_s(String boardName, String boardType) {
         response.then().body(NAME,Matchers.is(boardName))
                 .body(TYPE,Matchers.equalTo(boardType));
     }
@@ -114,10 +115,10 @@ public class JiraBoardAndSprintSteps {
 
     @Then("the user executes Get request")
     public void the_user_executes_Get_request() throws IOException, URISyntaxException {
-            RestAssured.baseURI = "http://localhost:8080";
-            RestAssured.basePath="rest/api/2/issue/"+issueIds.get(issueIds.size()-1);
-            response = given().header("accept", ContentType.JSON).header("Cookie",getJsessionCookie())
-                    .when().get().then().statusCode(200).and().contentType(ContentType.JSON).extract().response();
+        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.basePath="rest/api/2/issue/"+issueIds.get(issueIds.size()-1);
+        response = given().header("accept", ContentType.JSON).header("Cookie",getJsessionCookie())
+                .when().get().then().statusCode(200).and().contentType(ContentType.JSON).extract().response();
     }
 
     @Then("the user validates the issue's {string}, {string} and {string}")
@@ -130,28 +131,28 @@ public class JiraBoardAndSprintSteps {
 
     @When("the user moves Issue to Sprint")
     public void the_user_moves_Issue_to_Sprint() throws IOException, URISyntaxException {
-            RestAssured.baseURI = "http://localhost:8080";
-            RestAssured.basePath="rest/agile/1.0/sprint/"+sprintIds.get(0)+"/issue";
-            for(int i=0;i<issueIds.size();i++){
-               if(i<=10) {
-                 given().header("accept",ContentType.JSON).header("content-type",ContentType.JSON).header("cookie",getJsessionCookie())
+        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.basePath="rest/agile/1.0/sprint/"+sprintIds.get(0)+"/issue";
+        for(int i=0;i<issueIds.size();i++){
+            if(i<=10) {
+                given().header("accept",ContentType.JSON).header("content-type",ContentType.JSON).header("cookie",getJsessionCookie())
                         .body(getJiraMoveIssuePayload(issueKeys.get(0),issueIds.get(i),issueKeys.get(10)))
                         .when().post().then().statusCode(204).contentType(ContentType.JSON);
 
-                }else if(i>11 && i<=20){
-                    RestAssured.baseURI = "http://localhost:8080";
-                    RestAssured.basePath="rest/agile/1.0/sprint/"+sprintIds.get(1)+"/issue";
-                    given().header("accept",ContentType.JSON).header("content-type",ContentType.JSON).header("cookie",getJsessionCookie())
+            }else if(i>11 && i<=20){
+                RestAssured.baseURI = "http://localhost:8080";
+                RestAssured.basePath="rest/agile/1.0/sprint/"+sprintIds.get(1)+"/issue";
+                given().header("accept",ContentType.JSON).header("content-type",ContentType.JSON).header("cookie",getJsessionCookie())
                         .body(getJiraMoveIssuePayload(issueKeys.get(11),issueIds.get(i),issueKeys.get(20)))
                         .when().post().then().statusCode(204).contentType(ContentType.JSON);
-                }else {
-                   RestAssured.baseURI = "http://localhost:8080";
-                   RestAssured.basePath="rest/agile/1.0/sprint/"+sprintIds.get(2)+"/issue";
-                   given().header("accept",ContentType.JSON).header("content-type",ContentType.JSON).header("cookie",getJsessionCookie())
-                           .body(getJiraMoveIssuePayload(issueKeys.get(21),issueIds.get(i),issueKeys.get(30)))
-                           .when().post().then().statusCode(204).contentType(ContentType.JSON);
-                }
+            }else {
+                RestAssured.baseURI = "http://localhost:8080";
+                RestAssured.basePath="rest/agile/1.0/sprint/"+sprintIds.get(2)+"/issue";
+                given().header("accept",ContentType.JSON).header("content-type",ContentType.JSON).header("cookie",getJsessionCookie())
+                        .body(getJiraMoveIssuePayload(issueKeys.get(21),issueIds.get(i),issueKeys.get(30)))
+                        .when().post().then().statusCode(204).contentType(ContentType.JSON);
             }
+        }
     }
 
 
@@ -159,8 +160,6 @@ public class JiraBoardAndSprintSteps {
     public void the_user_validates_Issue_is_moved_to_Sprint() {
 
     }
-
-
 
 
 }

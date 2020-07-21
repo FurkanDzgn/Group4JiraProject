@@ -9,7 +9,7 @@ public class ConfigReader {
 
     static {
 
-        String path="configuration.properties";
+        String path="Configure.properties";
 
         try {
             // this line will open your file

@@ -63,4 +63,3 @@ Feature: Jira Validation
   Scenario: Replace Issue to Sprint
     When the user moves Issue to Sprint
     Then the user validates Issue is moved to Sprint
-

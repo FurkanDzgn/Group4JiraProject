@@ -1,23 +1,27 @@
 package Pojo.PojoJira;
 
+import java.util.Map;
+
 public class ResponseBodyAuth {
 
-    private Session session;
-    private LoginInfo loginInfo;
+    private Map<String, String> session;
+    private Map<String, Object> loginInfo;
 
-    public Session getSession() {
+    public Map<String, String> getSession() {
         return session;
     }
 
-    public void setSession(Session session) {
+    public void setSession(Map<String, String> session) {
         this.session = session;
     }
 
-    public LoginInfo getLoginInfo() {
+    public Map<String, Object> getLoginInfo() {
         return loginInfo;
     }
 
-    public void setLoginInfo(LoginInfo loginInfo) {
+    public void setLoginInfo(Map<String, Object> loginInfo) {
         this.loginInfo = loginInfo;
     }
+
+
 }
